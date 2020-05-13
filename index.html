@@ -153,6 +153,159 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java基本数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Java基本数据类型</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
+  	<time datetime="2020-05-13T03:09:07.511Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、八种基本数据类型"><a href="#一、八种基本数据类型" class="headerlink" title="一、八种基本数据类型"></a>一、八种基本数据类型</h2><table>
+<thead>
+<tr>
+<th>基本类型</th>
+<th>大小（字节）</th>
+<th>默认值</th>
+<th>封装类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>boolean</td>
+<td>-</td>
+<td>false</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>1</td>
+<td>(byte)0</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2</td>
+<td>(short)0</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>char</td>
+<td>2</td>
+<td>‘\u0000(null)’</td>
+<td>Character</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+<td>0</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4</td>
+<td>0.0f</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8</td>
+<td>0.0d</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>long</td>
+<td>8</td>
+<td>0L</td>
+<td>Long</td>
+</tr>
+</tbody></table>
+<p><strong>1）除以上8种基本数据类型外的数据类型均为引用数据类型</strong></p>
+<p><strong>2）虽然定义了boolean这种数据类型，但在Java虚拟机中没有任何供boolean值专用的字节码指令，在编译之后都使用Java虚拟机中的int数据类型来代替。</strong></p>
+<p><strong>3）基本类型之间转换（boolean类型与所有其他7种类型都不能进行转换）</strong></p>
+<ul>
+<li>高转低（强制转换，有可能丢失精度）</li>
+<li>低转高（自动转换，不丢失精度）</li>
+</ul>
+<p><strong><em>从小到大排序：byte &lt;（short=char）&lt; int &lt; long &lt; float &lt; double</em></strong></p>
+<hr>
+<h2 id="二、有趣的问题1：Integer"><a href="#二、有趣的问题1：Integer" class="headerlink" title="二、有趣的问题1：Integer"></a>二、有趣的问题1：Integer</h2><h5 id="1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。"><a href="#1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。" class="headerlink" title="1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。"></a>1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。</h5><h5 id="2、分析一下代码的结果"><a href="#2、分析一下代码的结果" class="headerlink" title="2、分析一下代码的结果"></a>2、分析一下代码的结果</h5><p><img src="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20200513101644429.png" alt="image-20200513101644429"></p>
+<p>为什么这样呢，是不是很有趣？查看Integer自动装箱源码分析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="comment">//i在[-128,127]</span></span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="comment">//其它范围</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// high value may be configured by property</span></span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">        String integerCacheHighPropValue =</span><br><span class="line">            sun.misc.VM.getSavedProperty(<span class="string">"java.lang.Integer.IntegerCache.high"</span>);</span><br><span class="line">        <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                <span class="comment">// If the property cannot be parsed into an int, ignore it.</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        high = h;</span><br><span class="line"></span><br><span class="line">        cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> j = low;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">            cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">        <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<p>​    <strong>发现valueOf方法在把一定范围的整数都使用了同一个缓存类计算返回对象，进入IntegerCache可以看到当high没有初始化时候会把-128到127的整数都提前实例化了。因此在这个范围内Integer创建的对象都是同一个对象，在范围外的对象都是新的对象。</strong></p>
+<p>​        <strong><em>个人理解，针对年龄，成绩等数值稳定在数值100上下的属性每次使用的时候并不用重新初始化对象，大大提升了性能！且发现high参数是可调整的，因此能可按需要调整上限。此外查看Short发现一定范围内的数值也提前实例化了，只是没有提供调整机制，固定把范围定在[-128,127]。</em></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> * <span class="meta">@param</span>  s a <span class="keyword">short</span> value.</span><br><span class="line"> * <span class="meta">@return</span> a &#123;<span class="meta">@code</span> Short&#125; instance representing &#123;<span class="meta">@code</span> s&#125;.</span><br><span class="line"> * <span class="meta">@since</span>  <span class="number">1.5</span></span><br><span class="line"> */</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Short <span class="title">valueOf</span><span class="params">(<span class="keyword">short</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> offset = <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">int</span> sAsInt = s;</span><br><span class="line">    <span class="keyword">if</span> (sAsInt &gt;= -<span class="number">128</span> &amp;&amp; sAsInt &lt;= <span class="number">127</span>) &#123; <span class="comment">// must cache</span></span><br><span class="line">        <span class="keyword">return</span> ShortCache.cache[sAsInt + offset];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Short(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3、有趣的实验"><a href="#3、有趣的实验" class="headerlink" title="3、有趣的实验"></a>3、有趣的实验</h5><p>​        上面说到Integer的缓存类的上限是可以设置的，尝试设置到[-128,255]。使得上面c == d的输出结果为true。</p>
+<p><em>1）设置运行参数-Djava.lang.Integer.IntegerCache.high=255</em></p>
+<p><img src="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20200513101848287.png" alt="image-20200513101848287"></p>
+<p><em>2）通过反射获取high的值可看到上限已增加到255</em></p>
+<p><img src="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20200513092540655.png" alt="image-20200513092540655"></p>
+<p><em>3）给test3方法添加参数后再次运行</em></p>
+<p><img src="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20200513092708483.png" alt="image-20200513092708483"></p>
+<h2 id="三、有趣的问题二：传值"><a href="#三、有趣的问题二：传值" class="headerlink" title="三、有趣的问题二：传值"></a>三、有趣的问题二：传值</h2><ol>
+<li>基本类型调用方法是数值传值（不改变值），引用类型调用方法是引用传递（改变值）。<strong><em>详细分析以后单独补充（JVM）。</em></strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value = <span class="number">10</span>;</span><br><span class="line">    System.out.println(<span class="string">"调用方法前value = "</span> + value);</span><br><span class="line">    pass(value);</span><br><span class="line">    System.out.println(<span class="string">"调用方法后value = "</span> + value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出结果：</span></span><br><span class="line"><span class="comment">    调用方法前value = 10</span></span><br><span class="line"><span class="comment">    调用方法后value = 10</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Person p = <span class="keyword">new</span> Person(<span class="string">"pdd"</span>, <span class="number">3</span>);</span><br><span class="line">    System.out.println(<span class="string">"调用方法前age = "</span> + p.getAge());</span><br><span class="line">    pass(p);</span><br><span class="line">    System.out.println(<span class="string">"调用方法后age = "</span> + p.getAge());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出结果：</span></span><br><span class="line"><span class="comment">    调用方法前age = 3</span></span><br><span class="line"><span class="comment">    调用方法后age = 18</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pass</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    value = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pass</span><span class="params">(Person p)</span> </span>&#123;</span><br><span class="line">    p.setAge(<span class="number">18</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>PS：刚开始写blog内容虽然简单，后续会定期分享更多有趣的问题</em></strong></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
