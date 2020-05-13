@@ -166,7 +166,7 @@
 
         
         <a href="/2020/05/13/Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
-  	<time datetime="2020-05-13T03:09:07.511Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
+  	<time datetime="2020-05-13T03:57:33.293Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
 </a>
         
       </header>
@@ -238,7 +238,7 @@
 <li>高转低（强制转换，有可能丢失精度）</li>
 <li>低转高（自动转换，不丢失精度）</li>
 </ul>
-<p><strong><em>从小到大排序：byte &lt;（short=char）&lt; int &lt; long &lt; float &lt; double</em></strong></p>
+<p><strong><em>从低到高排序：byte &lt;（short=char）&lt; int &lt; long &lt; float &lt; double</em></strong></p>
 <hr>
 <h2 id="二、有趣的问题1：Integer"><a href="#二、有趣的问题1：Integer" class="headerlink" title="二、有趣的问题1：Integer"></a>二、有趣的问题1：Integer</h2><h5 id="1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。"><a href="#1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。" class="headerlink" title="1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。"></a>1、先了解一概念：自动装箱其实就是将基本类型转换为引用类型；自动拆箱其实就是将引用类型转为基本类型。</h5><h5 id="2、分析一下代码的结果"><a href="#2、分析一下代码的结果" class="headerlink" title="2、分析一下代码的结果"></a>2、分析一下代码的结果</h5><p><img src="Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20200513101644429.png" alt="image-20200513101644429"></p>
 <p>为什么这样呢，是不是很有趣？查看Integer自动装箱源码分析</p>
