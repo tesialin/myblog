@@ -153,6 +153,163 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-浅谈String（上）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/">浅谈String（上）</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2020-05-18T08:04:01.912Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、String的特性"><a href="#一、String的特性" class="headerlink" title="一、String的特性"></a>一、String的特性</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以看到String是一个<strong>final</strong>类，因此该类是不能被继承的。</li>
+<li>String类定义了一个字符数组value[]，其实字符串内容就是存储在这个字符数组中，该值是使用<strong>final修饰的所以String对象是不可变的</strong>，一旦创建就不能被修改。</li>
+<li>String类实现了多个类：Serializable使String支持序列化（对字符串数据有很好的读取和存储性能），CharSequence提供了一些基本的字符操作的抽象方法（如获取字符索引，字符串长度等），此外还实现了Comparable接口使得String是可以比较大小的。</li>
+<li>注：文末附String类常用方法</li>
+</ul>
+<p><strong>简单来说字符串就是字符组成的串，字符串对象具有非常强大的字符串处理能力</strong></p>
+<h1 id="二、String对象的创建"><a href="#二、String对象的创建" class="headerlink" title="二、String对象的创建"></a>二、String对象的创建</h1><h4 id="1、对象的创建"><a href="#1、对象的创建" class="headerlink" title="1、对象的创建"></a>1、对象的创建</h4><p><img src="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/String1.png" alt="image-20200513184436176"></p>
+<h4 id="2、常用构造函数"><a href="#2、常用构造函数" class="headerlink" title="2、常用构造函数"></a>2、常用构造函数</h4><p> &emsp;&emsp;String类构造方法默认长度是字符数组value的长度（即传入字符串长度），若需<strong>指定字符串长度</strong>也提供了多个重载的构造函数，非常强大！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="string">""</span>.value; <span class="comment">//实际上创建了一个长度为0的字符数组</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = original.value; <span class="comment">//把传入的字符串存储在value值的赋值给当前对象的value数组</span></span><br><span class="line">    <span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(<span class="keyword">char</span> value[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = Arrays.copyOf(value, value.length);  <span class="comment">//通过字符数组的复制实现</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(<span class="keyword">byte</span> bytes[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(bytes, <span class="number">0</span>, bytes.length);  <span class="comment">//底层将byte数组转为char数组实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、字符串与其它数据类型的转换"><a href="#三、字符串与其它数据类型的转换" class="headerlink" title="三、字符串与其它数据类型的转换"></a>三、字符串与其它数据类型的转换</h1><h3 id="1、String和基本类型转换"><a href="#1、String和基本类型转换" class="headerlink" title="1、String和基本类型转换"></a>1、String和基本类型转换</h3><h5 id="字符串-→-数值"><a href="#字符串-→-数值" class="headerlink" title="字符串 → 数值"></a>字符串 → 数值</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">parseInt</span><span class="params">(String s)</span> <span class="keyword">throws</span> NumberFormatException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> parseInt(s,<span class="number">10</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">short</span> <span class="title">parseShort</span><span class="params">(String s)</span> <span class="keyword">throws</span> NumberFormatException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> parseShort(s, <span class="number">10</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">float</span> <span class="title">parseFloat</span><span class="params">(String s)</span> <span class="keyword">throws</span> NumberFormatException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> FloatingDecimal.parseFloat(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;上面分别列举了Integer，Short，Float包装类转成相应的方法（其它包装类亦是）。<strong><em>注意：若字符串不是数字型会报数值转换异常：java.lang.NumberFormatException</em></strong></p>
+<h5 id="数值-→-字符串（使用构造器）"><a href="#数值-→-字符串（使用构造器）" class="headerlink" title="数值 → 字符串（使用构造器）"></a>数值 → 字符串（使用构造器）</h5><p><img src="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/image-20200515201038667.png" alt="image-20200515201038667"></p>
+<p>&emsp;&emsp;查看String类发现提供了多个重载的静态方法转换数值为字符串对象。</p>
+<p><strong>&emsp;&emsp;基本数据类型和包装类可以自动拆箱装箱，所以可以用基本类型接收转换后的数值，也可以在转为String前完成自动装箱操作。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = Integer.parseInt(<span class="string">"11"</span>);  <span class="comment">//字符串 → 数值</span></span><br><span class="line">String s = String.valueOf(<span class="number">1111</span>);  <span class="comment">//数值 → 字符串</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、String和字符数组转换"><a href="#2、String和字符数组转换" class="headerlink" title="2、String和字符数组转换"></a>2、String和字符数组转换</h3><h5 id="char-→-String（使用构造器）"><a href="#char-→-String（使用构造器）" class="headerlink" title="char[] → String（使用构造器）"></a>char[] → String（使用构造器）</h5><ul>
+<li>String(char value[])    </li>
+<li>String(char value[], int offset, int count)      //指定区间</li>
+</ul>
+<h5 id="String-→-char"><a href="#String-→-char" class="headerlink" title="String → char[]"></a>String → char[]</h5><ul>
+<li>char[] toCharArray()    //返回字符数组</li>
+<li>void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin)</li>
+</ul>
+<p><img src="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/image-20200518113540523.png" alt="image-20200518113540523"></p>
+<h3 id="3、String和字节数组转换"><a href="#3、String和字节数组转换" class="headerlink" title="3、String和字节数组转换"></a>3、String和字节数组转换</h3><h5 id="byte-→-String（使用构造器）"><a href="#byte-→-String（使用构造器）" class="headerlink" title="byte[] → String（使用构造器）"></a>byte[] → String（使用构造器）</h5><ul>
+<li>String(byte[])</li>
+<li>String(byte[]，int offset，int length)</li>
+<li>String(byte bytes[], Charset charset)</li>
+</ul>
+<h5 id="String-→-byte"><a href="#String-→-byte" class="headerlink" title="String → byte[]"></a>String → byte[]</h5><ul>
+<li>byte[] getBytes()</li>
+<li>byte[] getBytes(String charsetName) </li>
+</ul>
+<p><strong><em>注意：记得设置字符编码</em></strong></p>
+<p><img src="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/Snipaste_2020-05-18_15-36-34.png" alt="test"></p>
+<h1 id="四、equals-和"><a href="#四、equals-和" class="headerlink" title="四、equals()和=="></a>四、equals()和==</h1><h4 id="1、Object的equals"><a href="#1、Object的equals" class="headerlink" title="1、Object的equals()"></a>1、Object的equals()</h4><p>&emsp;&emsp;看看Object是怎样定义equals()的？查看源码可以看到Object的equals()是使用<strong>“==”来判断两个对象的引用是否相等</strong>，判断的是地址。因此当我们在创建自定义类的时候可以通过<strong>重写Object的equals()方法来自定义比较规则</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、String的equals"><a href="#2、String的equals" class="headerlink" title="2、String的equals()"></a>2、String的equals()</h4><p>&emsp;&emsp;既然Object的equals是比较地址是否相等，显然不符合我们的需要判断两个字符串是否相等的需求。那么String类是如何重写equals()来定义比较规则的？源码分析如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">        String anotherString = (String)anObject;</span><br><span class="line">        <span class="keyword">int</span> n = value.length;</span><br><span class="line">        <span class="keyword">if</span> (n == anotherString.value.length) &#123;</span><br><span class="line">            <span class="keyword">char</span> v1[] = value;</span><br><span class="line">            <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line">            <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (v1[i] != v2[i])</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;从源码可以看到String类也重写了父类的equals()方法，重新定义的比较逻辑是遍历字符数组去判断两个字符串对象是否相等。<strong>因此String类的equals()比较的是字符串对象的内容是否相等，而不是比较字符串对象的地址。</strong></p>
+<h4 id="3、结论"><a href="#3、结论" class="headerlink" title="3、结论"></a>3、结论</h4><ul>
+<li>equlas()：在Object类中比较的是<strong>对象的地址</strong>，相等返回true反之false；在String类中比较的是<strong>对象的内容</strong>，内容相等返回true反之false。</li>
+<li>==：若比较的为<strong>基本数据类型则比较的是值</strong>是否相等，若相等则返回true反之false；若比较的为引用类型，则比较的是他们的地址是否相等。</li>
+</ul>
+<h1 id="五、字符串比较器（Comparable）"><a href="#五、字符串比较器（Comparable）" class="headerlink" title="五、字符串比较器（Comparable）"></a>五、字符串比较器（Comparable）</h1><h4 id="1、函数式接口-Comparable"><a href="#1、函数式接口-Comparable" class="headerlink" title="1、函数式接口-Comparable"></a>1、函数式接口-Comparable</h4><p>&emsp;&emsp;可以看到Comparable是一个函数式接口（只有一个抽象方法的接口），因此子类必须要重写其抽象方法compareTo。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(T o)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、String的compareTo方法"><a href="#2、String的compareTo方法" class="headerlink" title="2、String的compareTo方法"></a>2、String的compareTo方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(String anotherString)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len1 = value.length;</span><br><span class="line">        <span class="keyword">int</span> len2 = anotherString.value.length;</span><br><span class="line">        <span class="keyword">int</span> lim = Math.min(len1, len2);</span><br><span class="line">        <span class="keyword">char</span> v1[] = value;</span><br><span class="line">        <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (k &lt; lim) &#123;</span><br><span class="line">            <span class="keyword">char</span> c1 = v1[k];</span><br><span class="line">            <span class="keyword">char</span> c2 = v2[k];</span><br><span class="line">            <span class="keyword">if</span> (c1 != c2) &#123;</span><br><span class="line">                <span class="keyword">return</span> c1 - c2;</span><br><span class="line">            &#125;</span><br><span class="line">            k++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len1 - len2;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;String类实现了compareTo方法，使用当前字符串对象调用此方法去和传入的字符串对象进行比较（<strong><em>是不是和上面的equals()很像</em></strong>）。比较逻辑：根据两个字符串获取到对应的字符数组，获取<strong>最短字符数组的长度</strong>作为上限条件进行字符数组的迭代：</p>
+<ul>
+<li>逐个判断<strong>相同索引位置的字符</strong>是否相等，若不相等则返回这两个字符的<strong>ASCII码差值</strong>；</li>
+<li>若相等则进行下一个字符的差值判断；</li>
+<li>若各个字符都相等则返回<strong>两个字符数组的长度差值。</strong></li>
+</ul>
+<h4 id="3、demo"><a href="#3、demo" class="headerlink" title="3、demo"></a>3、demo</h4><p><img src="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/image-20200515193116604.png" alt="image-20200515193116604"></p>
+<p>&emsp;&emsp;<strong><em>分析：</em></strong>s2和s1比较第一个字符’a’相等因此进行下次比较，由于’b’==’d’为false，因此返回d字符与b字符的ASSII差值（100-98=2）；s3和s1进行比较，因为比较的次数上限条件为s1的长度3，因此比较结束后都相等，返回了s3的长度-s1的长度（4-3=1）。是不是很明白？</p>
+<h4 id="4、应用场景"><a href="#4、应用场景" class="headerlink" title="4、应用场景"></a>4、应用场景</h4><ul>
+<li>compareTo()可以用来比较两个字符串内容是否相等，返回0则相等。若使用equlas()方法则返回true。</li>
+<li>该比较器特性常用于当<strong>集合存储字符串对象</strong>的场景。如TreeSet的泛型指定为String的时候会自动排序。当然也可以通过实现自定义Comparetor比较器来实现。先演示一下效果…<strong><em>（PS：后面集合中重点讲解）</em></strong></li>
+</ul>
+<p><img src="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/image-20200515194223270.png" alt="image-20200515194223270"></p>
+<h1 id="六、常用方法"><a href="#六、常用方法" class="headerlink" title="六、常用方法"></a>六、常用方法</h1><h4 id="1、浅谈"><a href="#1、浅谈" class="headerlink" title="1、浅谈"></a>1、浅谈</h4><p>&emsp;&emsp;之所以把字符串常用方法放在最后是希望大家在对字符串对象有一定认识后再去使用String类提供的一些基本方法。大家都知道Java的封装性，其实jdk对于这些常见类或是工具类都只是封装了一些最基本不过增删改查等的方法，在日常的工作学习中我们可能要满足更复杂的业务需求，这些方法是远远不能的。类似上面分析String类的compareTo和equals方法大家也可以尝试分析一下其它方法的源码。</p>
+<h4 id="2、常用方法"><a href="#2、常用方法" class="headerlink" title="2、常用方法"></a>2、常用方法</h4><ul>
+<li>int length()：返回字符串的长度</li>
+<li>char charAt(int index)： 返回某索引处的字符</li>
+<li>String toLowerCase()：将String中的所有字符转换为小写</li>
+<li>String toUpperCase()：将String中的所有字符转换为大写</li>
+<li>String trim()：返回字符串的副本，去除首尾空白</li>
+<li>boolean equals(Object obj)：比较字符串的内容是否相同</li>
+<li>boolean equalsIgnoreCase(String anotherString)：与equals方法类似，忽略大小写</li>
+<li>int compareTo(String anotherString)：比较两个字符串的大小</li>
+<li>String substring(int beginIndex)：返回一个新的字符串，它是此字符串的从beginIndex开始截取到最后的一个子字符串。</li>
+<li>String substring(int beginIndex, int endIndex) ：返回一个新字符串，它是此字符串从beginIndex开始截取到endIndex(不包含)的一个子字符串。</li>
+<li>boolean endsWith(String suffix)：测试此字符串是否以指定的后缀结束</li>
+<li>boolean startsWith(String prefix)：测试此字符串是否以指定的前缀开始</li>
+<li>boolean startsWith(String prefix, int toffset)：测试此字符串从指定索引开始的子字符串是否以指定前缀开始</li>
+<li>boolean contains(CharSequence s)：当且仅当此字符串包含指定的 char 值序列时，返回 true</li>
+<li>int indexOf(String str)：返回指定子字符串在此字符串中第一次出现处的索引（indexOf和lastIndexOf方法如果未找到都是返回-1）</li>
+<li>int indexOf(String str, int fromIndex)：返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始</li>
+<li>int lastIndexOf(String str)：返回指定子字符串在此字符串中最右边出现处的索引</li>
+<li>int lastIndexOf(String str, int fromIndex)：返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索</li>
+<li>String replace(char oldChar, char newChar)：返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。</li>
+<li>String replace(CharSequence target, CharSequence replacement)：使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字串。</li>
+<li>String replaceAll(String regex, String replacement) ： 使用给定的replacement 替换此字符串所有匹配给定的正则表达式的子字符串。</li>
+<li>String replaceFirst(String regex, String replacement) ： 使用给定的replacement 替换此字符串匹配给定的正则表达式的第一个子字符串。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/18/%E6%B5%85%E8%B0%88String%EF%BC%88%E4%B8%8A%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java基本数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
